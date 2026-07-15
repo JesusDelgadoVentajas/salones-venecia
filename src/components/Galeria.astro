@@ -1,0 +1,152 @@
+---
+import { Image, getImage } from "astro:assets";
+
+import boda from "../assets/images/galeria/boda.jpg";
+import salon from "../assets/images/instalaciones/salon-banquete.jpg";
+import mesaDetalle from "../assets/images/instalaciones/discoteca-ambiente.jpg";
+import discoteca from "../assets/images/hero/hero-discoteca.png";
+import buffetMarisco from "../assets/images/comida/buffet-marisco.png";
+import buffetPostres from "../assets/images/comida/buffet-postres.png";
+import chuleton from "../assets/images/comida/chuleton.png";
+import cochinillo from "../assets/images/comida/cochinillo.png";
+import piernaChoto from "../assets/images/comida/pierna-choto.png";
+import carnes from "../assets/images/comida/carnes.png";
+import chupitos from "../assets/images/comida/chupitos.png";
+import tartas from "../assets/images/comida/tartas-caseras.jpg";
+
+const photos = [
+  { src: boda, alt: "Detalle de copa de bienvenida y flores en una boda", tall: true },
+  { src: salon, alt: "Salón de banquetes de Salones Venecia", tall: false },
+  { src: buffetMarisco, alt: "Buffet de marisco", tall: false },
+  { src: cochinillo, alt: "Cochinillo asado", tall: true },
+  { src: discoteca, alt: "Ambiente de discoteca en Salones Venecia", tall: false },
+  { src: tartas, alt: "Tartas caseras y café", tall: false },
+  { src: mesaDetalle, alt: "Detalle de mesa con entrantes", tall: true },
+  { src: chuleton, alt: "Chuletón a la brasa", tall: false },
+  { src: buffetPostres, alt: "Buffet de postres", tall: false },
+  { src: piernaChoto, alt: "Pierna de choto asada", tall: true },
+  { src: carnes, alt: "Plato de carnes de Salones Venecia", tall: false },
+  { src: chupitos, alt: "Chupitos de licor y bombones", tall: false },
+];
+
+const fullSize = await Promise.all(
+  photos.map((p) => getImage({ src: p.src, width: 1600, format: "webp", quality: 80 }))
+);
+---
+
+<section id="galeria" class="bg-brand-950 px-6 py-28 text-beige-50 sm:px-10 lg:py-36">
+  <div class="mx-auto max-w-7xl">
+    <div class="max-w-2xl" data-reveal>
+      <p class="mb-5 text-xs uppercase tracking-[0.4em] text-beige-200/70">Galería</p>
+      <h2 class="text-5xl sm:text-6xl">Momentos que hablan por sí solos</h2>
+    </div>
+
+    <div class="mt-16 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+      {
+        photos.map((photo, i) => (
+          <button
+            type="button"
+            class="lightbox-trigger group relative overflow-hidden rounded-sm"
+            data-index={i}
+            aria-label={`Ampliar foto: ${photo.alt}`}
+          >
+            <Image
+              src={photo.src}
+              alt={photo.alt}
+              width={700}
+              height={photo.tall ? 900 : 520}
+              class={`w-full object-cover transition-transform duration-700 group-hover:scale-105 ${photo.tall ? "aspect-[3/4]" : "aspect-[4/3]"}`}
+            />
+            <span class="absolute inset-0 bg-brand-950/0 transition-colors duration-300 group-hover:bg-brand-950/10" />
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  <div
+    id="lightbox"
+    class="fixed inset-0 z-[60] hidden items-center justify-center bg-brand-950/95 p-4 opacity-0 transition-opacity duration-300 sm:p-10"
+  >
+    <button
+      id="lightbox-close"
+      type="button"
+      aria-label="Cerrar"
+      class="absolute right-6 top-6 text-beige-50/80 transition-colors hover:text-beige-50"
+    >
+      <svg viewBox="0 0 24 24" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1">
+        <path d="M4 4l16 16M20 4L4 20" stroke-linecap="round" />
+      </svg>
+    </button>
+    <button
+      id="lightbox-prev"
+      type="button"
+      aria-label="Foto anterior"
+      class="absolute left-3 top-1/2 -translate-y-1/2 text-beige-50/70 transition-colors hover:text-beige-50 sm:left-8"
+    >
+      <svg viewBox="0 0 24 24" class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="1">
+        <path d="M15 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+    <button
+      id="lightbox-next"
+      type="button"
+      aria-label="Foto siguiente"
+      class="absolute right-3 top-1/2 -translate-y-1/2 text-beige-50/70 transition-colors hover:text-beige-50 sm:right-8"
+    >
+      <svg viewBox="0 0 24 24" class="h-8 w-8" fill="none" stroke="currentColor" stroke-width="1">
+        <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+    <img
+      id="lightbox-image"
+      src=""
+      alt=""
+      class="max-h-[85vh] max-w-full rounded-sm object-contain transition-opacity duration-300"
+    />
+  </div>
+
+  <script is:inline define:vars={{ images: fullSize.map((f, i) => ({ src: f.src, alt: photos[i].alt })) }}>
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-image");
+    const triggers = document.querySelectorAll(".lightbox-trigger");
+    let currentIndex = 0;
+
+    const show = (index) => {
+      currentIndex = (index + images.length) % images.length;
+      const item = images[currentIndex];
+      lightboxImg.src = item.src;
+      lightboxImg.alt = item.alt;
+    };
+
+    const open = (index) => {
+      show(index);
+      lightbox.classList.remove("hidden");
+      requestAnimationFrame(() => lightbox.classList.remove("opacity-0"));
+      document.body.classList.add("overflow-hidden");
+    };
+
+    const close = () => {
+      lightbox.classList.add("opacity-0");
+      document.body.classList.remove("overflow-hidden");
+      setTimeout(() => lightbox.classList.add("hidden"), 300);
+    };
+
+    triggers.forEach((trigger) => {
+      trigger.addEventListener("click", () => open(parseInt(trigger.dataset.index, 10)));
+    });
+
+    document.getElementById("lightbox-close").addEventListener("click", close);
+    document.getElementById("lightbox-prev").addEventListener("click", () => show(currentIndex - 1));
+    document.getElementById("lightbox-next").addEventListener("click", () => show(currentIndex + 1));
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox) close();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (lightbox.classList.contains("hidden")) return;
+      if (e.key === "Escape") close();
+      if (e.key === "ArrowLeft") show(currentIndex - 1);
+      if (e.key === "ArrowRight") show(currentIndex + 1);
+    });
+  </script>
+</section>

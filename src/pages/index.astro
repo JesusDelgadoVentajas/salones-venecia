@@ -1,16 +1,13 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
-
-const pendingSections = [
-  { id: "historia", label: "Nuestra historia" },
-  { id: "cocina", label: "Cocina y ambiente" },
-  { id: "menu", label: "Menú" },
-  { id: "servicios", label: "Servicios" },
-  { id: "galeria", label: "Galería" },
-  { id: "testimonios", label: "Testimonios" },
-  { id: "contacto", label: "Contacto" },
-];
+import Historia from "../components/Historia.astro";
+import CocinaAmbiente from "../components/CocinaAmbiente.astro";
+import Menu from "../components/Menu.astro";
+import Servicios from "../components/Servicios.astro";
+import Galeria from "../components/Galeria.astro";
+import Testimonios from "../components/Testimonios.astro";
+import Contacto from "../components/Contacto.astro";
 ---
 
 <BaseLayout
@@ -18,14 +15,11 @@ const pendingSections = [
   description="Salón de bodas, eventos y cafetería en Andújar (Jaén) con más de 35 años de experiencia familiar en hostelería."
 >
   <Hero />
-
-  {
-    pendingSections.map((section) => (
-      <section id={section.id} class="flex min-h-[40vh] items-center justify-center border-t border-chocolate-200/40 px-6 text-center">
-        <p class="font-serif text-2xl text-brand-900/40">
-          [PENDIENTE fase 3 — {section.label}]
-        </p>
-      </section>
-    ))
-  }
+  <Historia />
+  <CocinaAmbiente />
+  <Menu />
+  <Servicios />
+  <Galeria />
+  <Testimonios />
+  <Contacto />
 </BaseLayout>
