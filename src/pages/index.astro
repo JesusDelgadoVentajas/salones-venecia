@@ -1,84 +1,31 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { Image } from "astro:assets";
-import logo from "../assets/images/logo/salones-venecia-logo.png";
+import Hero from "../components/Hero.astro";
 
-const swatches = [
-  { name: "Azul de marca", bg: "bg-brand-800", hex: "#06357D" },
-  { name: "Chocolate", bg: "bg-chocolate-700", hex: "#6B4226" },
-  { name: "Beige", bg: "bg-beige-100", hex: "#EFE6D8" },
-  { name: "Granate (acento)", bg: "bg-garnet-700", hex: "#7A1F2B" },
+const pendingSections = [
+  { id: "historia", label: "Nuestra historia" },
+  { id: "cocina", label: "Cocina y ambiente" },
+  { id: "menu", label: "Menú" },
+  { id: "servicios", label: "Servicios" },
+  { id: "galeria", label: "Galería" },
+  { id: "testimonios", label: "Testimonios" },
+  { id: "contacto", label: "Contacto" },
 ];
 ---
 
 <BaseLayout
-  title="Salones Venecia — Guía de estilo (fase 1)"
-  description="Esqueleto del proyecto: paleta de marca y tipografía."
+  title="Salones Venecia — Salón de bodas y eventos en Andújar, Jaén"
+  description="Salón de bodas, eventos y cafetería en Andújar (Jaén) con más de 35 años de experiencia familiar en hostelería."
 >
-  <main class="mx-auto max-w-5xl px-6 py-24 sm:py-32">
-    <header class="mb-20" data-reveal>
-      <Image src={logo} alt="Salones Venecia" width={169} height={80} class="h-16 w-auto" />
-      <p class="mt-8 text-sm uppercase tracking-[0.3em] text-chocolate-600">
-        Fase 1 — esqueleto, paleta y tipografía
-      </p>
-      <h1 class="mt-4 text-5xl sm:text-6xl text-brand-800">Salones Venecia</h1>
-      <p class="mt-6 max-w-xl text-lg font-light text-brand-900/80">
-        Página de revisión interna, no es contenido final. Sirve para validar la
-        identidad visual antes de construir el hero y la navegación en la fase 2.
-      </p>
-    </header>
+  <Hero />
 
-    <section class="mb-20" data-reveal>
-      <h2 class="text-3xl text-brand-800 mb-2">Tipografía</h2>
-      <p class="mb-8 text-sm text-brand-900/60">
-        Serif de titulares: Cormorant Garamond · Sans-serif de cuerpo: Work Sans
-      </p>
-      <div class="space-y-6 border-t border-chocolate-200/60 pt-8">
-        <h1 class="text-6xl text-brand-800">Un día para siempre</h1>
-        <h2 class="text-4xl text-chocolate-700">Bodas, eventos y cafetería</h2>
-        <h3 class="text-2xl italic text-brand-800">Andújar, Jaén — desde hace más de 35 años</h3>
-        <p class="max-w-2xl text-base font-light leading-relaxed text-brand-950/80">
-          Cuerpo de texto en Work Sans, pensado para una lectura cómoda y
-          contemporánea que conviva con la elegancia de la serif en los
-          titulares. Espacios generosos, sin cajas ni bordes duros.
+  {
+    pendingSections.map((section) => (
+      <section id={section.id} class="flex min-h-[40vh] items-center justify-center border-t border-chocolate-200/40 px-6 text-center">
+        <p class="font-serif text-2xl text-brand-900/40">
+          [PENDIENTE fase 3 — {section.label}]
         </p>
-      </div>
-    </section>
-
-    <section class="mb-20" data-reveal>
-      <h2 class="text-3xl text-brand-800 mb-8">Paleta de marca</h2>
-      <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {
-          swatches.map((s) => (
-            <div class="overflow-hidden rounded-sm">
-              <div class={`h-28 w-full ${s.bg}`} />
-              <div class="pt-3">
-                <p class="text-sm text-brand-950">{s.name}</p>
-                <p class="text-xs uppercase tracking-wider text-brand-900/50">{s.hex}</p>
-              </div>
-            </div>
-          ))
-        }
-      </div>
-    </section>
-
-    <section data-reveal>
-      <h2 class="text-3xl text-brand-800 mb-8">Interacciones (muestra)</h2>
-      <div class="flex flex-wrap items-center gap-10">
-        <a
-          href="#"
-          class="group inline-flex items-center gap-2 text-brand-800 transition-colors hover:text-garnet-700"
-        >
-          <span class="text-lg">Descubre Salones Venecia</span>
-          <span class="h-px w-8 bg-current transition-all group-hover:w-12" />
-        </a>
-        <a
-          href="#"
-          class="rounded-full border border-garnet-700 px-8 py-3 text-sm uppercase tracking-widest text-garnet-700 transition-colors hover:bg-garnet-700 hover:text-beige-50"
-        >
-          Reserva tu fecha
-        </a>
-      </div>
-    </section>
-  </main>
+      </section>
+    ))
+  }
 </BaseLayout>

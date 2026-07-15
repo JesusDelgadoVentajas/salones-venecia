@@ -1,0 +1,148 @@
+---
+const links = [
+  { href: "#historia", label: "Nuestra historia" },
+  { href: "#cocina", label: "Cocina y ambiente" },
+  { href: "#menu", label: "Menú" },
+  { href: "#servicios", label: "Servicios" },
+  { href: "#galeria", label: "Galería" },
+  { href: "#contacto", label: "Contacto" },
+];
+---
+
+<header id="site-nav" class="fixed inset-x-0 top-0 z-50 transition-all duration-500">
+  <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 sm:px-10">
+    <a
+      href="#inicio"
+      class="font-serif text-xl tracking-wide text-current transition-opacity hover:opacity-70"
+    >
+      Salones Venecia
+    </a>
+
+    <ul class="hidden items-center gap-9 lg:flex">
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="group relative text-sm font-light tracking-wide text-current"
+            >
+              {link.label}
+              <span class="absolute -bottom-1 left-0 h-px w-0 bg-current transition-all duration-300 group-hover:w-full" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <a
+      href="#contacto"
+      class="hidden rounded-full border border-current px-6 py-2.5 text-xs uppercase tracking-widest text-current transition-colors duration-300 lg:inline-block"
+    >
+      Reserva tu fecha
+    </a>
+
+    <button
+      id="nav-toggle"
+      type="button"
+      aria-label="Abrir menú"
+      aria-expanded="false"
+      aria-controls="nav-mobile-panel"
+      class="relative z-50 flex h-8 w-8 flex-col items-center justify-center gap-[6px] lg:hidden"
+    >
+      <span class="h-px w-6 bg-current transition-transform duration-300" data-bar="1"></span>
+      <span class="h-px w-6 bg-current transition-opacity duration-300" data-bar="2"></span>
+      <span class="h-px w-6 bg-current transition-transform duration-300" data-bar="3"></span>
+    </button>
+  </nav>
+
+  <div
+    id="nav-mobile-panel"
+    class="fixed inset-0 z-40 flex -translate-y-full flex-col items-center justify-center gap-8 bg-beige-50 opacity-0 transition-all duration-500 lg:hidden"
+  >
+    {
+      links.map((link) => (
+        <a
+          href={link.href}
+          class="nav-mobile-link font-serif text-3xl text-brand-900 transition-opacity hover:opacity-60"
+        >
+          {link.label}
+        </a>
+      ))
+    }
+    <a
+      href="#contacto"
+      class="nav-mobile-link mt-4 rounded-full border border-garnet-700 px-8 py-3 text-sm uppercase tracking-widest text-garnet-700"
+    >
+      Reserva tu fecha
+    </a>
+  </div>
+</header>
+
+<style>
+  #site-nav {
+    color: var(--color-beige-50);
+  }
+  #site-nav.is-scrolled {
+    color: var(--color-brand-900);
+    background-color: color-mix(in srgb, var(--color-beige-50) 88%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-chocolate-300) 40%, transparent);
+  }
+  #site-nav.is-open {
+    color: var(--color-brand-900);
+  }
+
+  #nav-mobile-panel {
+    pointer-events: none;
+  }
+  #nav-mobile-panel.is-open {
+    translate: 0;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #nav-toggle[aria-expanded="true"] span[data-bar="1"] {
+    transform: translateY(6.5px) rotate(45deg);
+  }
+  #nav-toggle[aria-expanded="true"] span[data-bar="2"] {
+    opacity: 0;
+  }
+  #nav-toggle[aria-expanded="true"] span[data-bar="3"] {
+    transform: translateY(-6.5px) rotate(-45deg);
+  }
+</style>
+
+<script>
+  const nav = document.getElementById("site-nav");
+  const toggle = document.getElementById("nav-toggle");
+  const panel = document.getElementById("nav-mobile-panel");
+  const mobileLinks = document.querySelectorAll<HTMLAnchorElement>(".nav-mobile-link");
+
+  const setScrolled = () => {
+    if (!nav) return;
+    nav.classList.toggle("is-scrolled", window.scrollY > 40);
+  };
+  setScrolled();
+  window.addEventListener("scroll", setScrolled, { passive: true });
+
+  const closeMenu = () => {
+    toggle?.setAttribute("aria-expanded", "false");
+    panel?.classList.remove("is-open");
+    nav?.classList.remove("is-open");
+    document.body.classList.remove("overflow-hidden");
+  };
+
+  toggle?.addEventListener("click", () => {
+    const isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) {
+      closeMenu();
+    } else {
+      toggle.setAttribute("aria-expanded", "true");
+      panel?.classList.add("is-open");
+      nav?.classList.add("is-open");
+      document.body.classList.add("overflow-hidden");
+    }
+  });
+
+  mobileLinks.forEach((link) => link.addEventListener("click", closeMenu));
+</script>
