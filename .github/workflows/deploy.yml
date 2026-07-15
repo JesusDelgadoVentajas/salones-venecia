@@ -32,8 +32,6 @@ jobs:
 
       - name: Build
         run: npm run build
-        env:
-          FORMSPREE_ENDPOINT: ${{ secrets.FORMSPREE_ENDPOINT }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

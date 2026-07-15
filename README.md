@@ -8,7 +8,7 @@ con más de 35 años de experiencia en hostelería familiar.
 - [Astro](https://astro.build) — sitio 100% estático
 - [Tailwind CSS v4](https://tailwindcss.com)
 - TypeScript
-- Sin backend ni base de datos — formulario de contacto vía [Formspree](https://formspree.io)
+- Sin backend ni base de datos — contacto por teléfono, Instagram y visita presencial
 
 ## Desarrollo
 

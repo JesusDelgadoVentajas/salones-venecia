@@ -1,0 +1,15 @@
+---
+interface Props {
+  from: string;
+  to: string;
+  height?: string;
+}
+
+const { from, to, height = "10rem" } = Astro.props;
+---
+
+<div
+  aria-hidden="true"
+  style={`height:${height}; background:linear-gradient(to bottom, var(--color-${from}), var(--color-${to}));`}
+>
+</div>

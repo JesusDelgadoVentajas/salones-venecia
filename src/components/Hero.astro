@@ -2,10 +2,19 @@
 import { Image } from "astro:assets";
 import limusina from "../assets/images/hero/hero-limusina.png";
 import discoteca from "../assets/images/hero/hero-discoteca.png";
+import gondola from "../assets/images/logo/gondola-icon.png";
 ---
 
 <section id="inicio" class="relative flex min-h-[100svh] w-full items-center overflow-hidden bg-brand-950 pt-28 pb-20 lg:pt-24">
-  <div class="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 px-6 sm:px-10 lg:grid-cols-2 lg:gap-8">
+  <Image
+    src={gondola}
+    alt=""
+    width={900}
+    height={900}
+    aria-hidden="true"
+    class="pointer-events-none absolute -left-24 top-1/2 hidden w-[38rem] -translate-y-1/2 object-contain opacity-[0.05] brightness-0 invert md:block lg:w-[46rem]"
+  />
+  <div class="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 px-6 sm:px-10 lg:grid-cols-2 lg:gap-8">
     <div class="relative z-10 order-2 lg:order-1" data-reveal>
       <p class="mb-6 text-xs uppercase tracking-[0.4em] text-beige-200/80">
         Andújar &middot; Jaén &middot; desde hace más de 35 años

@@ -1,4 +1,7 @@
 ---
+import { Image } from "astro:assets";
+import gondola from "../assets/images/logo/gondola-icon.png";
+
 const links = [
   { href: "#historia", label: "Nuestra historia" },
   { href: "#cocina", label: "Cocina y ambiente" },
@@ -13,9 +16,10 @@ const links = [
   <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 sm:px-10">
     <a
       href="#inicio"
-      class="font-serif text-xl tracking-wide text-current transition-opacity hover:opacity-70"
+      class="flex items-center gap-3 transition-opacity hover:opacity-70"
     >
-      Salones Venecia
+      <Image src={gondola} alt="" width={110} height={110} class="logo-icon h-11 w-11 object-contain sm:h-12 sm:w-12" />
+      <span class="font-serif text-xl tracking-wide text-current sm:text-2xl">Salones Venecia</span>
     </a>
 
     <ul class="hidden items-center gap-9 lg:flex">
@@ -90,6 +94,15 @@ const links = [
   }
   #site-nav.is-open {
     color: var(--color-brand-900);
+  }
+
+  #site-nav .logo-icon {
+    filter: brightness(0) invert(1);
+    transition: filter 0.5s;
+  }
+  #site-nav.is-scrolled .logo-icon,
+  #site-nav.is-open .logo-icon {
+    filter: none;
   }
 
   #nav-mobile-panel {

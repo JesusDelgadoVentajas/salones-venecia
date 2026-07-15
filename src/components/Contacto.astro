@@ -1,5 +1,4 @@
 ---
-const formspreeEndpoint = import.meta.env.FORMSPREE_ENDPOINT || "https://formspree.io/f/TU_ID_DE_FORMULARIO";
 const address = "C. Puerta de Madrid, 7, 23740 Andújar, Jaén";
 const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(address)}&output=embed`;
 const phoneDisplay = "953 50 51 57";
@@ -14,121 +13,55 @@ const instagramHref = "https://www.instagram.com/salonesvenecia_/";
       <p class="mb-5 text-xs uppercase tracking-[0.4em] text-chocolate-600">Contacto</p>
       <h2 class="text-5xl text-brand-800 sm:text-6xl">Hablemos de tu celebración</h2>
       <p class="mt-8 text-lg font-light leading-relaxed text-brand-950/80">
-        Cuéntanos qué estás celebrando y te ayudamos a darle forma. Estaremos
-        encantados de recibirte.
+        Llámanos, escríbenos por Instagram o pásate por el salón — estaremos
+        encantados de atenderte.
       </p>
     </div>
 
-    <div class="mt-16 grid grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-24">
-      <div class="flex flex-col gap-10" data-reveal>
-        <div class="grid grid-cols-1 gap-8 sm:grid-cols-2">
-          <div>
-            <p class="text-xs uppercase tracking-[0.3em] text-chocolate-600">Teléfono</p>
-            <a href={phoneHref} class="mt-2 block font-serif text-2xl text-brand-800 hover:text-garnet-700">
-              {phoneDisplay}
-            </a>
-          </div>
-          <div>
-            <p class="text-xs uppercase tracking-[0.3em] text-chocolate-600">Instagram</p>
-            <a
-              href={instagramHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="mt-2 block font-serif text-2xl text-brand-800 hover:text-garnet-700"
-            >
-              {instagramHandle}
-            </a>
-          </div>
-          <div>
-            <p class="text-xs uppercase tracking-[0.3em] text-chocolate-600">Dirección</p>
-            <p class="mt-2 font-serif text-2xl text-brand-800">{address}</p>
-          </div>
-          <div>
-            <p class="text-xs uppercase tracking-[0.3em] text-chocolate-600">Horario</p>
-            <p class="mt-2 font-serif text-2xl text-brand-800/40">[PENDIENTE: horario]</p>
-          </div>
-        </div>
-
-        <div class="overflow-hidden rounded-sm">
-          <iframe
-            src={mapSrc}
-            width="100%"
-            height="360"
-            style="border:0;"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            title={`Mapa de Salones Venecia — ${address}`}
-          ></iframe>
-        </div>
-      </div>
-
-      <form
-        action={formspreeEndpoint}
-        method="POST"
-        class="flex flex-col gap-6"
-        data-reveal
+    <div class="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2" data-reveal>
+      <a
+        href={phoneHref}
+        class="group flex flex-col justify-between gap-8 rounded-sm border border-brand-800/15 px-8 py-10 transition-colors duration-300 hover:border-brand-800/40"
       >
-        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <label class="flex flex-col gap-2">
-            <span class="text-xs uppercase tracking-[0.3em] text-chocolate-600">Nombre</span>
-            <input
-              type="text"
-              name="nombre"
-              required
-              class="border-b border-brand-800/30 bg-transparent py-2 font-light text-brand-950 outline-none transition-colors focus:border-brand-800"
-            />
-          </label>
-          <label class="flex flex-col gap-2">
-            <span class="text-xs uppercase tracking-[0.3em] text-chocolate-600">Teléfono</span>
-            <input
-              type="tel"
-              name="telefono"
-              required
-              class="border-b border-brand-800/30 bg-transparent py-2 font-light text-brand-950 outline-none transition-colors focus:border-brand-800"
-            />
-          </label>
-        </div>
+        <span class="text-xs uppercase tracking-[0.3em] text-chocolate-600">Teléfono</span>
+        <span class="font-serif text-4xl text-brand-800 transition-colors group-hover:text-garnet-700 sm:text-5xl">
+          {phoneDisplay}
+        </span>
+      </a>
+      <a
+        href={instagramHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="group flex flex-col justify-between gap-8 rounded-sm border border-brand-800/15 px-8 py-10 transition-colors duration-300 hover:border-brand-800/40"
+      >
+        <span class="text-xs uppercase tracking-[0.3em] text-chocolate-600">Instagram</span>
+        <span class="font-serif text-4xl text-brand-800 transition-colors group-hover:text-garnet-700 sm:text-5xl">
+          {instagramHandle}
+        </span>
+      </a>
+    </div>
 
-        <label class="flex flex-col gap-2">
-          <span class="text-xs uppercase tracking-[0.3em] text-chocolate-600">Correo electrónico</span>
-          <input
-            type="email"
-            name="email"
-            required
-            class="border-b border-brand-800/30 bg-transparent py-2 font-light text-brand-950 outline-none transition-colors focus:border-brand-800"
-          />
-        </label>
+    <div class="mt-10 grid grid-cols-1 gap-8 border-t border-chocolate-300/40 pt-10 sm:grid-cols-2" data-reveal>
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-chocolate-600">Dirección</p>
+        <p class="mt-2 font-serif text-2xl text-brand-800">{address}</p>
+      </div>
+      <div>
+        <p class="text-xs uppercase tracking-[0.3em] text-chocolate-600">Horario</p>
+        <p class="mt-2 font-serif text-2xl text-brand-800">Todos los días, de 7:00 a 23:00</p>
+      </div>
+    </div>
 
-        <label class="flex flex-col gap-2">
-          <span class="text-xs uppercase tracking-[0.3em] text-chocolate-600">Tipo de evento</span>
-          <select
-            name="tipo_evento"
-            class="border-b border-brand-800/30 bg-transparent py-2 font-light text-brand-950 outline-none transition-colors focus:border-brand-800"
-          >
-            <option value="boda">Boda</option>
-            <option value="comunion">Comunión</option>
-            <option value="evento">Evento de empresa</option>
-            <option value="otro">Otro</option>
-          </select>
-        </label>
-
-        <label class="flex flex-col gap-2">
-          <span class="text-xs uppercase tracking-[0.3em] text-chocolate-600">Mensaje</span>
-          <textarea
-            name="mensaje"
-            rows="4"
-            required
-            class="resize-none border-b border-brand-800/30 bg-transparent py-2 font-light text-brand-950 outline-none transition-colors focus:border-brand-800"
-          ></textarea>
-        </label>
-
-        <button
-          type="submit"
-          class="mt-4 self-start rounded-full border border-brand-800 px-8 py-3 text-xs uppercase tracking-widest text-brand-800 transition-colors duration-300 hover:bg-brand-800 hover:text-beige-50"
-        >
-          Enviar mensaje
-        </button>
-      </form>
+    <div class="mt-10 overflow-hidden rounded-sm" data-reveal>
+      <iframe
+        src={mapSrc}
+        width="100%"
+        height="480"
+        style="border:0;"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title={`Mapa de Salones Venecia — ${address}`}
+      ></iframe>
     </div>
   </div>
 </section>
