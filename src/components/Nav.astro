@@ -58,29 +58,29 @@ const links = [
       <span class="h-px w-6 bg-current transition-transform duration-300" data-bar="3"></span>
     </button>
   </nav>
-
-  <div
-    id="nav-mobile-panel"
-    class="fixed inset-0 z-40 flex -translate-y-full flex-col items-center justify-center gap-8 bg-beige-50 opacity-0 transition-all duration-500 lg:hidden"
-  >
-    {
-      links.map((link) => (
-        <a
-          href={link.href}
-          class="nav-mobile-link font-serif text-3xl text-brand-900 transition-opacity hover:opacity-60"
-        >
-          {link.label}
-        </a>
-      ))
-    }
-    <a
-      href="#contacto"
-      class="nav-mobile-link mt-4 rounded-full border border-garnet-700 px-8 py-3 text-sm uppercase tracking-widest text-garnet-700"
-    >
-      Reserva tu fecha
-    </a>
-  </div>
 </header>
+
+<div
+  id="nav-mobile-panel"
+  class="fixed inset-0 z-40 flex -translate-y-full flex-col items-center justify-center gap-8 bg-beige-50 opacity-0 transition-all duration-500 lg:hidden"
+>
+  {
+    links.map((link) => (
+      <a
+        href={link.href}
+        class="nav-mobile-link font-serif text-3xl text-brand-900 transition-opacity hover:opacity-60"
+      >
+        {link.label}
+      </a>
+    ))
+  }
+  <a
+    href="#contacto"
+    class="nav-mobile-link mt-4 rounded-full border border-garnet-700 px-8 py-3 text-sm uppercase tracking-widest text-garnet-700"
+  >
+    Reserva tu fecha
+  </a>
+</div>
 
 <style>
   #site-nav {
