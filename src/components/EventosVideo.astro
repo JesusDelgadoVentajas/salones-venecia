@@ -1,0 +1,42 @@
+---
+import BackgroundVideo from "./BackgroundVideo.astro";
+import bodaPoster from "../assets/images/instalaciones/boda-video-poster.jpg";
+import comunionesPoster from "../assets/images/instalaciones/comuniones-video-poster.jpg";
+import sanvalentinPoster from "../assets/images/instalaciones/sanvalentin-video-poster.jpg";
+import salonPoster from "../assets/images/instalaciones/salon-ambiente-poster.jpg";
+
+const videos = [
+  { mp4: "videos/boda-ambiente.mp4", webm: "videos/boda-ambiente.webm", poster: bodaPoster, alt: "Boda celebrada en Salones Venecia", label: "Bodas" },
+  { mp4: "videos/comuniones-ambiente.mp4", webm: "videos/comuniones-ambiente.webm", poster: comunionesPoster, alt: "Comunión celebrada en Salones Venecia", label: "Comuniones" },
+  { mp4: "videos/sanvalentin-ambiente.mp4", webm: "videos/sanvalentin-ambiente.webm", poster: sanvalentinPoster, alt: "San Valentín en Salones Venecia", label: "San Valentín" },
+  { mp4: "videos/salon-ambiente.mp4", webm: "videos/salon-ambiente.webm", poster: salonPoster, alt: "Salón de Salones Venecia montado para una celebración", label: "Salones" },
+];
+---
+
+<section id="momentos" class="bg-beige-50 px-6 py-28 sm:px-10 lg:py-36">
+  <div class="mx-auto max-w-7xl">
+    <div class="max-w-2xl" data-reveal>
+      <p class="mb-5 text-xs uppercase tracking-[0.4em] text-chocolate-600">Momentos</p>
+      <h2 class="text-5xl text-brand-800 sm:text-6xl">Cada celebración, en movimiento</h2>
+    </div>
+
+    <div class="mt-16 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+      {
+        videos.map((v) => (
+          <div class="relative overflow-hidden rounded-sm" data-reveal>
+            <BackgroundVideo
+              mp4={v.mp4}
+              webm={v.webm}
+              poster={v.poster}
+              alt={v.alt}
+              class="aspect-[3/4] w-full object-cover"
+            />
+            <span class="pointer-events-none absolute bottom-0 left-0 right-0 bg-gradient-to-t from-brand-950/70 to-transparent px-4 py-3 text-xs uppercase tracking-widest text-beige-50">
+              {v.label}
+            </span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
