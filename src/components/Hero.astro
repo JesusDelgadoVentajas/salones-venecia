@@ -1,89 +1,55 @@
 ---
 import { Image } from "astro:assets";
 import limusina from "../assets/images/hero/hero-limusina.png";
-import discoteca from "../assets/images/hero/hero-discoteca.png";
-import gondola from "../assets/images/logo/gondola-icon.png";
 ---
 
-<section id="inicio" class="relative flex min-h-[100svh] w-full items-center overflow-hidden bg-brand-950 pt-28 pb-20 lg:pt-24">
-  <Image
-    src={gondola}
-    alt=""
-    width={900}
-    height={900}
-    aria-hidden="true"
-    class="pointer-events-none absolute -left-24 top-1/2 hidden w-[38rem] -translate-y-1/2 object-contain opacity-[0.05] brightness-0 invert md:block lg:w-[46rem]"
-  />
-  <div class="relative mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-16 px-6 sm:px-10 lg:grid-cols-2 lg:gap-8">
-    <div class="relative z-10 order-2 lg:order-1" data-reveal>
-      <p class="mb-6 text-xs uppercase tracking-[0.4em] text-beige-200/80">
+<section id="inicio" class="relative flex min-h-[100svh] w-full items-end overflow-hidden bg-garnet-950">
+  <div data-parallax data-speed="0.15" class="absolute inset-0 -top-16 h-[calc(100%+4rem)]">
+    <Image
+      src={limusina}
+      alt="Limusina de cortesía a la entrada de Salones Venecia, de noche"
+      widths={[640, 828, 1200, 1448]}
+      sizes="100vw"
+      class="h-full w-full scale-105 object-cover object-[30%_50%] sm:object-[38%_50%] lg:object-[50%_42%]"
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+
+  <div class="absolute inset-0 bg-gradient-to-b from-brand-950/40 via-transparent to-transparent"></div>
+  <div class="absolute inset-0 bg-garnet-950/35"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-garnet-950/96 via-garnet-950/80 to-garnet-950/30"></div>
+
+  <div class="relative z-10 w-full px-6 pb-16 sm:px-10 sm:pb-20 lg:pb-24">
+    <div class="max-w-2xl" data-reveal>
+      <span class="mb-6 inline-block h-px w-10 bg-brand-400"></span>
+      <p class="mb-6 text-xs uppercase tracking-[0.4em] text-beige-100/85">
         Andújar &middot; Jaén &middot; desde hace más de 35 años
       </p>
       <h1 class="text-6xl leading-[1.05] text-beige-50 sm:text-7xl lg:text-[5.5rem]">
         Salones<br />Venecia
       </h1>
-      <p class="mt-7 max-w-md text-lg font-light leading-relaxed text-beige-100/85">
+      <p class="mt-7 max-w-md text-lg font-light leading-relaxed text-beige-100/90">
         Bodas, comuniones y celebraciones en el corazón de Andújar, donde cada
         detalle se cuida como en familia desde hace más de tres décadas.
       </p>
       <div class="mt-10 flex flex-wrap items-center gap-8">
         <a
           href="#contacto"
-          class="rounded-full border border-beige-50/80 px-8 py-3 text-xs uppercase tracking-widest text-beige-50 transition-colors duration-300 hover:bg-beige-50 hover:text-brand-900"
+          class="rounded-full bg-garnet-700 px-8 py-3 text-xs uppercase tracking-widest text-beige-50 transition-colors duration-300 hover:bg-garnet-800"
         >
           Reserva tu fecha
         </a>
         <a
           href="#historia"
-          class="group inline-flex items-center gap-2 text-sm text-beige-100/80 transition-colors hover:text-beige-50"
+          class="group inline-flex items-center gap-2 text-sm text-beige-100/85 transition-colors hover:text-beige-50"
         >
           Nuestra historia
-          <span class="h-px w-6 bg-current transition-all duration-300 group-hover:w-9"></span>
+          <span class="h-px w-6 bg-garnet-400 transition-all duration-300 group-hover:w-9"></span>
         </a>
       </div>
     </div>
-
-    <div class="relative order-1 h-[60vh] lg:order-2 lg:h-[70vh]" data-reveal>
-      <div
-        data-parallax
-        data-speed="0.12"
-        class="absolute inset-x-6 top-0 h-[78%] overflow-hidden rounded-sm shadow-[0_30px_60px_-30px_rgba(3,23,54,0.6)] sm:inset-x-10 lg:inset-x-0"
-      >
-        <Image
-          src={limusina}
-          alt="Servicio de limusina de cortesía para los novios en Salones Venecia"
-          width={1000}
-          height={1250}
-          class="h-full w-full scale-110 object-cover"
-          loading="eager"
-          fetchpriority="high"
-        />
-      </div>
-      <div
-        data-parallax
-        data-speed="0.22"
-        class="absolute bottom-0 left-0 w-[62%] overflow-hidden rounded-sm border-4 border-beige-50 shadow-[0_20px_45px_-20px_rgba(3,23,54,0.55)] sm:w-[55%]"
-      >
-        <Image
-          src={discoteca}
-          alt="Ambiente de discoteca y música en directo en Salones Venecia"
-          width={640}
-          height={430}
-          class="aspect-[4/3] w-full scale-110 object-cover"
-          loading="eager"
-        />
-      </div>
-    </div>
   </div>
-
-  <a
-    href="#historia"
-    aria-label="Descubre más"
-    class="absolute bottom-8 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 text-beige-100/70 transition-colors hover:text-beige-50 sm:flex"
-  >
-    <span class="text-[10px] uppercase tracking-[0.3em]">Descubre más</span>
-    <span class="h-8 w-px animate-pulse bg-current"></span>
-  </a>
 </section>
 
 <script>

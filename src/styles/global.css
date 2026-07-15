@@ -67,6 +67,7 @@
   --color-garnet-700: #7a1f2b; /* granate base */
   --color-garnet-800: #5e1821;
   --color-garnet-900: #451218;
+  --color-garnet-950: #2d0b10;
 }
 
 @layer base {
