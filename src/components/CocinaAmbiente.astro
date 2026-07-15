@@ -1,7 +1,8 @@
 ---
 import { Image } from "astro:assets";
-import salon from "../assets/images/instalaciones/salon-banquete.jpg";
+import BackgroundVideo from "./BackgroundVideo.astro";
 import mesaDetalle from "../assets/images/instalaciones/discoteca-ambiente.jpg";
+import discotecaPoster from "../assets/images/instalaciones/discoteca-video-poster.jpg";
 import chuleton from "../assets/images/comida/chuleton.png";
 import tartas from "../assets/images/comida/tartas-caseras.jpg";
 ---
@@ -20,16 +21,16 @@ import tartas from "../assets/images/comida/tartas-caseras.jpg";
     </div>
 
     <div class="mt-16 grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-6">
-      <div class="relative overflow-hidden rounded-sm lg:col-span-7 lg:row-span-2" data-reveal>
-        <Image
-          src={salon}
-          alt="Salón de banquetes de Salones Venecia preparado para una celebración"
-          width={1100}
-          height={950}
-          class="h-full w-full object-cover"
+      <div class="relative overflow-hidden rounded-sm lg:col-span-5 lg:row-span-2" data-reveal>
+        <BackgroundVideo
+          mp4="videos/discoteca-ambiente.mp4"
+          webm="videos/discoteca-ambiente.webm"
+          poster={discotecaPoster}
+          alt="Ambiente de discoteca y música en directo en Salones Venecia"
+          class="aspect-[3/4] h-full w-full object-cover lg:aspect-auto"
         />
       </div>
-      <div class="relative overflow-hidden rounded-sm lg:col-span-5" data-reveal>
+      <div class="relative overflow-hidden rounded-sm lg:col-span-7" data-reveal>
         <Image
           src={chuleton}
           alt="Chuletón a la brasa, uno de los platos de Salones Venecia"
@@ -38,7 +39,7 @@ import tartas from "../assets/images/comida/tartas-caseras.jpg";
           class="aspect-[16/10] w-full object-cover"
         />
       </div>
-      <div class="relative overflow-hidden rounded-sm lg:col-span-5" data-reveal>
+      <div class="relative overflow-hidden rounded-sm lg:col-span-7" data-reveal>
         <Image
           src={tartas}
           alt="Tartas caseras de repostería propia de Salones Venecia"

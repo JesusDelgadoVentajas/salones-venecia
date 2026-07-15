@@ -1,7 +1,8 @@
 ---
 import { Image } from "astro:assets";
+import BackgroundVideo from "./BackgroundVideo.astro";
 import limusina from "../assets/images/hero/hero-limusina.png";
-import discoteca from "../assets/images/hero/hero-discoteca.png";
+import salonPoster from "../assets/images/instalaciones/salon-ambiente-poster.jpg";
 ---
 
 <section id="inicio" class="relative flex min-h-[100svh] w-full items-center overflow-hidden bg-brand-950 pt-28 pb-20 lg:pt-24">
@@ -53,15 +54,15 @@ import discoteca from "../assets/images/hero/hero-discoteca.png";
       <div
         data-parallax
         data-speed="0.22"
-        class="absolute bottom-0 left-0 w-[62%] overflow-hidden rounded-sm border-4 border-beige-50 shadow-[0_20px_45px_-20px_rgba(3,23,54,0.55)] sm:w-[55%]"
+        class="absolute bottom-0 left-0 w-[46%] overflow-hidden rounded-sm border-4 border-beige-50 shadow-[0_20px_45px_-20px_rgba(3,23,54,0.55)] sm:w-[42%]"
       >
-        <Image
-          src={discoteca}
-          alt="Ambiente de discoteca y música en directo en Salones Venecia"
-          width={640}
-          height={430}
-          class="aspect-[4/3] w-full scale-110 object-cover"
-          loading="eager"
+        <BackgroundVideo
+          mp4="videos/salon-ambiente.mp4"
+          webm="videos/salon-ambiente.webm"
+          poster={salonPoster}
+          alt="El salón de Salones Venecia preparado para una celebración"
+          eager
+          class="aspect-[3/4] w-full scale-110 object-cover"
         />
       </div>
     </div>
