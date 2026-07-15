@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+/* Serif de titulares (estilo invitación de boda) y sans-serif de cuerpo, autoalojadas */
+@import "@fontsource/cormorant-garamond/400.css";
+@import "@fontsource/cormorant-garamond/500.css";
+@import "@fontsource/cormorant-garamond/600.css";
+@import "@fontsource/cormorant-garamond/400-italic.css";
+@import "@fontsource/work-sans/300.css";
+@import "@fontsource/work-sans/400.css";
+@import "@fontsource/work-sans/500.css";
+
+@theme {
+  --font-serif: "Cormorant Garamond", "Georgia", serif;
+  --font-sans: "Work Sans", "Helvetica Neue", sans-serif;
+
+  /*
+   * Azul de marca: HEX exacto extraído por análisis de píxeles del logo
+   * (assets-originales/logo/image.png -> #06357D, pico de frecuencia).
+   * brand-800 fija ese valor exacto; el resto de la escala se interpola
+   * en HSL a partir de él para mantener coherencia tonal.
+   */
+  --color-brand-50: #ecf3fe;
+  --color-brand-100: #d8e7fd;
+  --color-brand-200: #accbfb;
+  --color-brand-300: #77aaf8;
+  --color-brand-400: #3c86f6;
+  --color-brand-500: #0b63ea;
+  --color-brand-600: #094eb9;
+  --color-brand-700: #073e92;
+  --color-brand-800: #06357d; /* azul de marca exacto */
+  --color-brand-900: #042353;
+  --color-brand-950: #031736;
+
+  /* Chocolate cálido — inspirado en los manteles del salón */
+  --color-chocolate-50: #faf4f0;
+  --color-chocolate-100: #f4e9e1;
+  --color-chocolate-200: #e8d0bf;
+  --color-chocolate-300: #dab196;
+  --color-chocolate-400: #ca9068;
+  --color-chocolate-500: #b56f40;
+  --color-chocolate-600: #8f5833;
+  --color-chocolate-700: #6b4226; /* chocolate base */
+  --color-chocolate-800: #57351f;
+  --color-chocolate-900: #402717;
+  --color-chocolate-950: #291a0f;
+
+  /* Beige cálido — inspirado en los manteles del salón */
+  --color-beige-50: #f9f6f1;
+  --color-beige-100: #efe6d8; /* beige base */
+  --color-beige-200: #e6d8c2;
+  --color-beige-300: #d5be9a;
+  --color-beige-400: #c4a26e;
+  --color-beige-500: #ae8647;
+  --color-beige-600: #896a38;
+  --color-beige-700: #6c532d;
+  --color-beige-800: #534022;
+  --color-beige-900: #3d2f19;
+
+  /* Granate — solo para acentos puntuales (CTAs, detalles), nunca dominante */
+  --color-garnet-50: #fbeff0;
+  --color-garnet-100: #f7dee2;
+  --color-garnet-200: #edbac1;
+  --color-garnet-300: #e28d98;
+  --color-garnet-400: #d65c6c;
+  --color-garnet-500: #c33245;
+  --color-garnet-600: #9b2736;
+  --color-garnet-700: #7a1f2b; /* granate base */
+  --color-garnet-800: #5e1821;
+  --color-garnet-900: #451218;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-beige-50 text-brand-950 font-sans font-light antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-serif font-medium tracking-tight;
+  }
+
+  ::selection {
+    @apply bg-garnet-200 text-brand-950;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
