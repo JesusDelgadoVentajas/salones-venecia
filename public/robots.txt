@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jesusdelgadoventajas.github.io/salones-venecia/sitemap-index.xml

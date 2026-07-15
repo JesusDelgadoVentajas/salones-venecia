@@ -4,13 +4,39 @@ import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
 import { withBase } from "../lib/url";
+import { getImage } from "astro:assets";
+import ogImageSrc from "../assets/images/og-image.jpg";
 
 interface Props {
   title: string;
-  description?: string;
+  description: string;
 }
 
 const { title, description } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImage = await getImage({ src: ogImageSrc, width: 1200, height: 630, format: "jpg" });
+const ogImageURL = new URL(ogImage.src, Astro.site);
+
+const phone = "+34953505157";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": ["LocalBusiness", "EventVenue"],
+  name: "Salones Venecia",
+  image: ogImageURL.toString(),
+  url: canonicalURL.toString(),
+  telephone: phone,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "C. Puerta de Madrid, 7",
+    addressLocality: "Andújar",
+    addressRegion: "Jaén",
+    postalCode: "23740",
+    addressCountry: "ES",
+  },
+  sameAs: ["https://www.instagram.com/salonesvenecia_/"],
+};
 ---
 
 <html lang="es">
@@ -20,15 +46,36 @@ const { title, description } = Astro.props;
     <link rel="icon" type="image/png" href={withBase("favicon.png")} />
     <link rel="apple-touch-icon" href={withBase("apple-touch-icon.png")} />
     <meta name="generator" content={Astro.generator} />
-    {description && <meta name="description" content={description} />}
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
     <title>{title}</title>
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Salones Venecia" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="es_ES" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+
     <script is:inline>
       document.documentElement.classList.add("js");
     </script>
   </head>
   <body>
     <Nav />
-    <slot />
+    <main>
+      <slot />
+    </main>
     <Footer />
     <WhatsAppButton />
     <script>
