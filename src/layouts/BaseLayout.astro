@@ -40,6 +40,17 @@ const jsonLd = {
 
 <html lang="es">
   <head>
+    <script is:inline>
+      // Siempre empezamos en portada al cargar/recargar la página, incluso
+      // si la URL trae un ancla (#galeria, #contacto...) de una visita
+      // anterior. Los clics normales del menú durante la sesión no se ven
+      // afectados: esto solo actúa en la carga inicial.
+      if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+      const resetScrollToTop = () => window.scrollTo(0, 0);
+      resetScrollToTop();
+      document.addEventListener("DOMContentLoaded", resetScrollToTop);
+      window.addEventListener("load", resetScrollToTop);
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/png" href={withBase("favicon.png")} />
