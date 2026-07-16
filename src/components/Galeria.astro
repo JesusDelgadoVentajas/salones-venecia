@@ -41,12 +41,13 @@ const fullSize = await Promise.all(
       <h2 class="text-5xl sm:text-6xl">Momentos que hablan por sí solos</h2>
     </div>
 
-    <div class="mt-16 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+    <div id="galeria-grid" class="mt-16 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
       {
         photos.map((photo, i) => (
           <button
             type="button"
             class="lightbox-trigger group relative overflow-hidden rounded-sm"
+            data-gallery-card
             data-index={i}
             aria-label={`Ampliar foto: ${photo.alt}`}
           >
@@ -149,4 +150,96 @@ const fullSize = await Promise.all(
       if (e.key === "ArrowRight") show(currentIndex + 1);
     });
   </script>
+
+  <script>
+    import { gsap } from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const cards = gsap.utils.toArray<HTMLElement>("#galeria-grid [data-gallery-card]");
+
+    if (cards.length && !reduceMotion) {
+      const groups = [cards.slice(0, 4), cards.slice(4, 8), cards.slice(8, 12)];
+
+      gsap.set(cards, {
+        opacity: 0,
+        y: 50,
+        z: -220,
+        rotateX: () => gsap.utils.random(-14, 14),
+        rotateY: () => gsap.utils.random(-14, 14),
+        transformPerspective: 1000,
+      });
+
+      const animateIn = (targets: HTMLElement[]) => {
+        gsap.to(targets, {
+          opacity: 1,
+          y: 0,
+          z: 0,
+          rotateX: 0,
+          rotateY: 0,
+          stagger: 0.08,
+          ease: "power2.out",
+          duration: 0.9,
+          onStart: () => targets.forEach((el) => el.classList.add("is-animating")),
+          onComplete: () => targets.forEach((el) => el.classList.remove("is-animating")),
+        });
+      };
+
+      const mm = gsap.matchMedia();
+
+      mm.add("(min-width: 1024px)", () => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: "#galeria-grid",
+            start: "top 75%",
+            end: "+=90%",
+            pin: true,
+            scrub: 1,
+          },
+        });
+
+        groups.forEach((group, i) => {
+          tl.to(
+            group,
+            {
+              opacity: 1,
+              y: 0,
+              z: 0,
+              rotateX: 0,
+              rotateY: 0,
+              stagger: 0.08,
+              ease: "power2.out",
+              duration: 1,
+              onStart: () => group.forEach((el) => el.classList.add("is-animating")),
+              onComplete: () => group.forEach((el) => el.classList.remove("is-animating")),
+            },
+            i * 0.5
+          );
+        });
+
+        return () => tl.scrollTrigger?.kill();
+      });
+
+      mm.add("(max-width: 1023.98px)", () => {
+        const triggers = ScrollTrigger.batch(cards, {
+          start: "top 88%",
+          onEnter: (batch) => animateIn(batch as HTMLElement[]),
+          once: true,
+        });
+
+        return () => triggers.forEach((t) => t.kill());
+      });
+    }
+  </script>
+
+  <style>
+    #galeria-grid [data-gallery-card] {
+      backface-visibility: hidden;
+    }
+    #galeria-grid [data-gallery-card].is-animating {
+      will-change: transform, opacity;
+    }
+  </style>
 </section>
