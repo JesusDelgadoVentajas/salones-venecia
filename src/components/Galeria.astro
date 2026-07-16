@@ -163,7 +163,14 @@ const fullSize = await Promise.all(
     if (cards.length && !reduceMotion) {
       const groups = [cards.slice(0, 4), cards.slice(4, 8), cards.slice(8, 12)];
 
-      gsap.set(cards, {
+      // Si la página carga con la galería ya a la vista (p.ej. recarga con
+      // #galeria en la URL), esas fotos no se ocultan: solo animan las que
+      // el usuario todavía no ha alcanzado, para evitar el parpadeo de
+      // "ocultar y revelar de golpe" al entrar directo por ancla.
+      const alreadyInViewThreshold = window.innerHeight * 1.1;
+      const notYetReached = cards.filter((card) => card.getBoundingClientRect().top >= alreadyInViewThreshold);
+
+      gsap.set(notYetReached, {
         opacity: 0,
         y: 50,
         z: -220,
