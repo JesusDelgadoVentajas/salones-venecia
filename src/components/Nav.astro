@@ -69,7 +69,8 @@ const links = [
     links.map((link) => (
       <a
         href={link.href}
-        class="nav-mobile-link font-serif text-3xl text-brand-900 transition-opacity hover:opacity-60"
+        data-section={link.href.slice(1)}
+        class="nav-mobile-link font-serif text-3xl text-brand-900 transition-colors hover:opacity-60"
       >
         {link.label}
       </a>
@@ -99,6 +100,10 @@ const links = [
 
   #site-nav ul a.is-active span {
     width: 100%;
+  }
+
+  .nav-mobile-link.is-active {
+    color: var(--color-garnet-700);
   }
 
   #site-nav .logo-icon {
@@ -165,7 +170,9 @@ const links = [
   mobileLinks.forEach((link) => link.addEventListener("click", closeMenu));
 
   const sections = document.querySelectorAll<HTMLElement>("main section[id]");
-  const navLinks = document.querySelectorAll<HTMLAnchorElement>("#site-nav ul a[data-section]");
+  const navLinks = document.querySelectorAll<HTMLAnchorElement>(
+    "#site-nav ul a[data-section], #nav-mobile-panel a[data-section]"
+  );
 
   if (sections.length && navLinks.length) {
     const setActive = (id: string) => {
