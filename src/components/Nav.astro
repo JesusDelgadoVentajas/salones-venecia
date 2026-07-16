@@ -28,6 +28,7 @@ const links = [
           <li>
             <a
               href={link.href}
+              data-section={link.href.slice(1)}
               class="group relative text-sm font-light tracking-wide text-current"
             >
               {link.label}
@@ -96,6 +97,10 @@ const links = [
     color: var(--color-brand-900);
   }
 
+  #site-nav ul a.is-active span {
+    width: 100%;
+  }
+
   #site-nav .logo-icon {
     filter: brightness(0) invert(1);
     transition: filter 0.5s;
@@ -158,4 +163,23 @@ const links = [
   });
 
   mobileLinks.forEach((link) => link.addEventListener("click", closeMenu));
+
+  const sections = document.querySelectorAll<HTMLElement>("main section[id]");
+  const navLinks = document.querySelectorAll<HTMLAnchorElement>("#site-nav ul a[data-section]");
+
+  if (sections.length && navLinks.length) {
+    const setActive = (id: string) => {
+      navLinks.forEach((link) => link.classList.toggle("is-active", link.dataset.section === id));
+    };
+
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px" }
+    );
+    sections.forEach((section) => sectionObserver.observe(section));
+  }
 </script>

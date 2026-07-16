@@ -21,11 +21,18 @@ const instagramHref = "https://www.instagram.com/salonesvenecia_/";
     <div class="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2" data-reveal>
       <a
         href={phoneHref}
-        class="group flex flex-col justify-between gap-8 rounded-sm border border-brand-800/15 px-8 py-10 transition-colors duration-300 hover:border-brand-800/40"
+        data-copy-phone={phoneDisplay}
+        class="group relative flex flex-col justify-between gap-8 rounded-sm border border-brand-800/15 px-8 py-10 transition-colors duration-300 hover:border-brand-800/40"
       >
         <span class="text-xs uppercase tracking-[0.3em] text-chocolate-600">Teléfono</span>
         <span class="font-serif text-4xl text-brand-800 transition-colors group-hover:text-garnet-700 sm:text-5xl">
           {phoneDisplay}
+        </span>
+        <span
+          data-copy-feedback
+          class="pointer-events-none absolute right-6 top-6 rounded-full bg-brand-800 px-3 py-1 text-[0.65rem] uppercase tracking-widest text-beige-50 opacity-0 transition-opacity duration-300"
+        >
+          Copiado
         </span>
       </a>
       <a
@@ -64,4 +71,28 @@ const instagramHref = "https://www.instagram.com/salonesvenecia_/";
       ></iframe>
     </div>
   </div>
+
+  <script>
+    const phoneLinks = document.querySelectorAll<HTMLAnchorElement>("[data-copy-phone]");
+
+    phoneLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        const value = link.dataset.copyPhone;
+        if (!value || !navigator.clipboard) return;
+        navigator.clipboard
+          .writeText(value)
+          .then(() => {
+            const feedback = link.querySelector<HTMLElement>("[data-copy-feedback]");
+            if (!feedback) return;
+            feedback.classList.remove("opacity-0");
+            feedback.classList.add("opacity-100");
+            setTimeout(() => {
+              feedback.classList.remove("opacity-100");
+              feedback.classList.add("opacity-0");
+            }, 1500);
+          })
+          .catch(() => {});
+      });
+    });
+  </script>
 </section>
