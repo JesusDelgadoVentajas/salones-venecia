@@ -20,7 +20,7 @@ import limusina from "../assets/images/hero/hero-limusina.png";
   <div class="absolute inset-0 bg-garnet-950/35"></div>
   <div class="absolute inset-0 bg-gradient-to-t from-garnet-950/96 via-garnet-950/80 to-garnet-950/30"></div>
 
-  <canvas id="hero-ripple" class="pointer-events-none absolute inset-0 z-[5]"></canvas>
+  <canvas id="hero-ripple" class="pointer-events-none absolute inset-0 z-[5] mix-blend-difference"></canvas>
 
   <div class="relative z-10 w-full px-6 pb-16 sm:px-10 sm:pb-20 lg:pb-24">
     <div class="max-w-2xl" data-reveal>
@@ -143,8 +143,8 @@ import limusina from "../assets/images/hero/hero-limusina.png";
       ripples.forEach((r) => {
         ctx.beginPath();
         ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(239, 230, 216, ${r.alpha})`;
-        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = `rgba(255, 255, 255, ${r.alpha})`;
+        ctx.lineWidth = 2;
         ctx.stroke();
       });
       requestAnimationFrame(render);
