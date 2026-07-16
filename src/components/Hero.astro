@@ -20,6 +20,8 @@ import limusina from "../assets/images/hero/hero-limusina.png";
   <div class="absolute inset-0 bg-garnet-950/35"></div>
   <div class="absolute inset-0 bg-gradient-to-t from-garnet-950/96 via-garnet-950/80 to-garnet-950/30"></div>
 
+  <canvas id="hero-ripple" class="pointer-events-none absolute inset-0 z-[5]"></canvas>
+
   <div class="relative z-10 w-full px-6 pb-16 sm:px-10 sm:pb-20 lg:pb-24">
     <div class="max-w-2xl" data-reveal>
       <span class="mb-6 inline-block h-px w-10 bg-brand-400"></span>
@@ -76,5 +78,77 @@ import limusina from "../assets/images/hero/hero-limusina.png";
       },
       { passive: true }
     );
+  }
+</script>
+
+<script>
+  // Ondas de agua al mover el cursor o el dedo sobre el hero, como si se
+  // tocara el agua de un canal veneciano.
+  const section = document.getElementById("inicio");
+  const canvas = document.getElementById("hero-ripple") as HTMLCanvasElement | null;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const ctx = canvas?.getContext("2d");
+
+  if (section && canvas && ctx && !reduceMotion) {
+    type Ripple = { x: number; y: number; radius: number; alpha: number };
+    let ripples: Ripple[] = [];
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    const resize = () => {
+      const rect = section.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      canvas.style.width = `${rect.width}px`;
+      canvas.style.height = `${rect.height}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    const spawnRipple = (x: number, y: number) => {
+      ripples.push({ x, y, radius: 0, alpha: 0.45 });
+      if (ripples.length > 14) ripples.shift();
+    };
+
+    let lastSpawn = 0;
+    section.addEventListener(
+      "pointermove",
+      (e) => {
+        const now = performance.now();
+        if (now - lastSpawn < 90) return;
+        lastSpawn = now;
+        const rect = section.getBoundingClientRect();
+        spawnRipple(e.clientX - rect.left, e.clientY - rect.top);
+      },
+      { passive: true }
+    );
+
+    section.addEventListener(
+      "pointerdown",
+      (e) => {
+        const rect = section.getBoundingClientRect();
+        spawnRipple(e.clientX - rect.left, e.clientY - rect.top);
+      },
+      { passive: true }
+    );
+
+    const render = () => {
+      const rect = section.getBoundingClientRect();
+      ctx.clearRect(0, 0, rect.width, rect.height);
+      ripples.forEach((r) => {
+        r.radius += 1.8;
+        r.alpha *= 0.955;
+      });
+      ripples = ripples.filter((r) => r.alpha > 0.02 && r.radius < 90);
+      ripples.forEach((r) => {
+        ctx.beginPath();
+        ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(239, 230, 216, ${r.alpha})`;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      });
+      requestAnimationFrame(render);
+    };
+    render();
   }
 </script>

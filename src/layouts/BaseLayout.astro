@@ -3,8 +3,9 @@ import "../styles/global.css";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import { withBase } from "../lib/url";
-import { getImage } from "astro:assets";
+import { Image, getImage } from "astro:assets";
 import ogImageSrc from "../assets/images/og-image.jpg";
+import gondolaFloat from "../assets/images/logo/gondola-icon.png";
 
 interface Props {
   title: string;
@@ -87,6 +88,20 @@ const jsonLd = {
       <slot />
     </main>
     <Footer />
+
+    <Image
+      src={gondolaFloat}
+      alt=""
+      width={72}
+      height={72}
+      id="floating-gondola"
+      class="pointer-events-none fixed right-3 top-1/2 z-30 h-9 w-9 object-contain opacity-90 sm:right-6 sm:h-11 sm:w-11"
+    />
+
+    <div id="custom-cursor" class="pointer-events-none fixed left-0 top-0 z-[9999] opacity-0">
+      <Image src={gondolaFloat} alt="" width={72} height={72} class="custom-cursor-icon h-8 w-8 object-contain" />
+    </div>
+
     <script>
       const revealables = document.querySelectorAll<HTMLElement>("[data-reveal]");
       const observer = new IntersectionObserver(
@@ -102,6 +117,84 @@ const jsonLd = {
       );
       revealables.forEach((el) => observer.observe(el));
     </script>
+
+    <script>
+      // Góndola decorativa que "navega" arriba/abajo según el progreso de
+      // scroll por toda la página, con un ligero balanceo lateral.
+      const boat = document.getElementById("floating-gondola");
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (boat && !reduceMotion) {
+        let ticking = false;
+        const update = () => {
+          const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+          const progress = scrollable > 0 ? window.scrollY / scrollable : 0;
+          const channel = window.innerHeight * 0.6;
+          const travelY = (progress - 0.5) * channel;
+          const sway = Math.sin(progress * Math.PI * 10) * 14;
+          const tilt = Math.sin(progress * Math.PI * 10) * 8;
+          boat.style.transform = `translate(${sway}px, ${travelY}px) rotate(${tilt}deg)`;
+          ticking = false;
+        };
+        update();
+        window.addEventListener(
+          "scroll",
+          () => {
+            if (!ticking) {
+              requestAnimationFrame(update);
+              ticking = true;
+            }
+          },
+          { passive: true }
+        );
+        window.addEventListener("resize", update);
+      }
+    </script>
+
+    <script>
+      // Cursor personalizado (solo en escritorio con ratón/trackpad): una
+      // góndola sigue al puntero con un pequeño retraso y gira según la
+      // dirección del movimiento, como si estuviera remando.
+      const cursor = document.getElementById("custom-cursor");
+      const icon = cursor?.querySelector<HTMLElement>(".custom-cursor-icon");
+      const isFinePointer = window.matchMedia("(pointer: fine)").matches;
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (cursor && isFinePointer && !reduceMotion) {
+        document.documentElement.classList.add("custom-cursor-active");
+
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let cursorX = mouseX;
+        let cursorY = mouseY;
+
+        window.addEventListener("mousemove", (e) => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+          cursor.style.opacity = "1";
+        });
+
+        document.addEventListener("mouseleave", () => {
+          cursor.style.opacity = "0";
+        });
+
+        const render = () => {
+          cursorX += (mouseX - cursorX) * 0.18;
+          cursorY += (mouseY - cursorY) * 0.18;
+          cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+
+          const dx = mouseX - cursorX;
+          const dy = mouseY - cursorY;
+          if (icon && (Math.abs(dx) > 1.5 || Math.abs(dy) > 1.5)) {
+            const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+            icon.style.transform = `translate(-50%, -50%) rotate(${angle + 90}deg)`;
+          }
+
+          requestAnimationFrame(render);
+        };
+        render();
+      }
+    </script>
   </body>
 </html>
 
@@ -114,5 +207,23 @@ const jsonLd = {
   .js [data-reveal].is-visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  #floating-gondola {
+    will-change: transform;
+  }
+
+  #custom-cursor {
+    will-change: transform;
+  }
+  .custom-cursor-icon {
+    transition: transform 0.15s ease-out;
+    transform: translate(-50%, -50%) rotate(0deg);
+    transform-origin: 50% 50%;
+  }
+
+  html.custom-cursor-active,
+  html.custom-cursor-active * {
+    cursor: none !important;
   }
 </style>
