@@ -34,11 +34,11 @@ const fullSize = await Promise.all(
 );
 ---
 
-<section id="galeria" class="bg-brand-950 px-6 py-28 text-beige-50 sm:px-10 lg:py-36">
+<section id="galeria" class="bg-garnet-950 px-6 py-28 text-beige-50 sm:px-10 lg:py-36">
   <div class="mx-auto max-w-7xl">
     <div class="max-w-2xl" data-reveal>
       <p class="mb-5 text-xs uppercase tracking-[0.4em] text-beige-200/70">Galería</p>
-      <h2 class="text-5xl sm:text-6xl" data-reveal-title><span class="reveal-title-mask">Momentos que hablan por sí solos</span></h2>
+      <h2 class="text-5xl font-normal tracking-wide sm:text-6xl" data-reveal-title><span class="reveal-title-mask">Momentos que hablan por sí solos</span></h2>
     </div>
 
     <div id="galeria-grid" class="mt-16 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
@@ -58,7 +58,7 @@ const fullSize = await Promise.all(
               height={photo.tall ? 875 : 525}
               class={`w-full object-cover transition-transform duration-700 group-hover:scale-105 ${photo.tall ? "aspect-[4/5]" : "aspect-[4/3]"}`}
             />
-            <span class="absolute inset-0 bg-brand-950/0 transition-colors duration-300 group-hover:bg-brand-950/10" />
+            <span class="absolute inset-0 bg-garnet-950/0 transition-colors duration-300 group-hover:bg-garnet-950/10" />
           </button>
         ))
       }
@@ -67,7 +67,7 @@ const fullSize = await Promise.all(
 
   <div
     id="lightbox"
-    class="fixed inset-0 z-[60] hidden items-center justify-center bg-brand-950/95 p-4 opacity-0 transition-opacity duration-300 sm:p-10"
+    class="fixed inset-0 z-[60] hidden items-center justify-center bg-garnet-950/95 p-4 opacity-0 transition-opacity duration-300 sm:p-10"
   >
     <button
       id="lightbox-close"
