@@ -101,20 +101,14 @@ const jsonLd = {
     <script is:inline>
       document.documentElement.classList.add("js");
 
-      // Intro de entrada: se muestra una vez por sesión (para no cansar a
-      // quien recarga o navega dentro del sitio) y nunca con reduced-motion.
-      // Marcamos el skip inline, antes de pintar, para que no haya parpadeo.
+      // Intro de entrada: se muestra en cada carga/recarga. Solo se salta
+      // con reduced-motion. Marcamos el skip inline, antes de pintar, para
+      // que no haya parpadeo.
       try {
-        var seen = sessionStorage.getItem("introSeen");
-        var noMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (seen || noMotion) {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
           document.documentElement.setAttribute("data-intro", "skip");
-        } else {
-          sessionStorage.setItem("introSeen", "1");
         }
-      } catch (e) {
-        document.documentElement.setAttribute("data-intro", "skip");
-      }
+      } catch (e) {}
     </script>
   </head>
   <body>
