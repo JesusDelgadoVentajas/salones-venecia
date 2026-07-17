@@ -100,9 +100,31 @@ const jsonLd = {
 
     <script is:inline>
       document.documentElement.classList.add("js");
+
+      // Intro de entrada: se muestra una vez por sesión (para no cansar a
+      // quien recarga o navega dentro del sitio) y nunca con reduced-motion.
+      // Marcamos el skip inline, antes de pintar, para que no haya parpadeo.
+      try {
+        var seen = sessionStorage.getItem("introSeen");
+        var noMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (seen || noMotion) {
+          document.documentElement.setAttribute("data-intro", "skip");
+        } else {
+          sessionStorage.setItem("introSeen", "1");
+        }
+      } catch (e) {
+        document.documentElement.setAttribute("data-intro", "skip");
+      }
     </script>
   </head>
   <body>
+    <div id="intro-overlay" aria-hidden="true">
+      <div class="intro-inner">
+        <Image src={gondolaFloat} alt="" width={96} height={96} class="intro-gondola" />
+        <span class="intro-title">Salones Venecia</span>
+      </div>
+    </div>
+
     <Nav />
     <main>
       <slot />
@@ -262,5 +284,65 @@ const jsonLd = {
   html.custom-cursor-active,
   html.custom-cursor-active * {
     cursor: none !important;
+  }
+
+  /* --- Intro de entrada (góndola que navega y descubre la web) --- */
+  #intro-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-garnet-950);
+    pointer-events: none;
+    /* Reveal 100% por CSS: aunque el JS fallara, el telón se levanta igual. */
+    animation: intro-lift 2.4s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+  }
+  html[data-intro="skip"] #intro-overlay {
+    display: none;
+  }
+  .intro-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.1rem;
+  }
+  .intro-gondola {
+    width: 4.5rem;
+    height: 4.5rem;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    animation: intro-sail 1.9s ease-in-out forwards;
+  }
+  .intro-title {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    letter-spacing: 0.12em;
+    color: var(--color-beige-50);
+    opacity: 0;
+    animation: intro-title-fade 2.3s ease forwards;
+  }
+
+  @keyframes intro-sail {
+    0% { transform: translateX(-42vw) translateY(0) rotate(-6deg); opacity: 0; }
+    12% { opacity: 1; }
+    25% { transform: translateX(-21vw) translateY(-12px) rotate(-2deg); }
+    50% { transform: translateX(0) translateY(0) rotate(0deg); }
+    75% { transform: translateX(21vw) translateY(-12px) rotate(3deg); }
+    100% { transform: translateX(42vw) translateY(0) rotate(6deg); opacity: 1; }
+  }
+  @keyframes intro-title-fade {
+    0%, 18% { opacity: 0; transform: translateY(8px); }
+    45%, 72% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-4px); }
+  }
+  @keyframes intro-lift {
+    0%, 68% { transform: translateY(0); }
+    100% { transform: translateY(-100%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #intro-overlay { display: none; }
   }
 </style>

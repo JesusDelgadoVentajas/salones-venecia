@@ -4,7 +4,7 @@ import limusina from "../assets/images/hero/hero-limusina.png";
 ---
 
 <section id="inicio" class="relative flex min-h-[100svh] w-full items-end overflow-hidden bg-garnet-950">
-  <div data-parallax data-speed="0.15" class="absolute inset-0 -top-16 h-[calc(100%+4rem)]">
+  <div data-parallax data-tilt data-speed="0.15" style="--depth: 1.5" class="absolute inset-0 -top-16 h-[calc(100%+4rem)]">
     <Image
       src={limusina}
       alt="Limusina de cortesía a la entrada de Salones Venecia, de noche"
@@ -22,7 +22,7 @@ import limusina from "../assets/images/hero/hero-limusina.png";
 
   <canvas id="hero-ripple" class="pointer-events-none absolute inset-0 z-[5] mix-blend-difference"></canvas>
 
-  <div class="relative z-10 w-full px-6 pb-16 sm:px-10 sm:pb-20 lg:pb-24">
+  <div data-tilt style="--depth: 0.55" class="relative z-10 w-full px-6 pb-16 sm:px-10 sm:pb-20 lg:pb-24">
     <div class="max-w-2xl" data-reveal>
       <span class="mb-6 inline-block h-px w-10 bg-brand-400"></span>
       <p class="mb-6 text-xs uppercase tracking-[0.4em] text-beige-100/85">
@@ -55,6 +55,8 @@ import limusina from "../assets/images/hero/hero-limusina.png";
 </section>
 
 <script>
+  // Parallax de scroll: escribe --sy (no transform directo) para que
+  // componga con el tilt del giroscopio/ratón, que aporta --tx/--ty.
   const layers = document.querySelectorAll<HTMLElement>("[data-parallax]");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -64,7 +66,7 @@ import limusina from "../assets/images/hero/hero-limusina.png";
       const y = window.scrollY;
       layers.forEach((layer) => {
         const speed = parseFloat(layer.dataset.speed ?? "0.15");
-        layer.style.transform = `translateY(${y * speed}px)`;
+        layer.style.setProperty("--sy", `${y * speed}px`);
       });
       ticking = false;
     };
@@ -80,6 +82,95 @@ import limusina from "../assets/images/hero/hero-limusina.png";
     );
   }
 </script>
+
+<script>
+  // Parallax "ventana": las capas del hero se desplazan en profundidad
+  // siguiendo el ratón (escritorio) o la inclinación del móvil (giroscopio).
+  const hero = document.getElementById("inicio");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (hero && !reduce) {
+    const MAX = 24; // desplazamiento máximo (px) antes de aplicar la profundidad
+    const clamp = (v: number, m: number) => Math.max(-m, Math.min(m, v));
+    let targetX = 0;
+    let targetY = 0;
+    let curX = 0;
+    let curY = 0;
+
+    // Escritorio: movimiento del ratón.
+    if (window.matchMedia("(pointer: fine)").matches) {
+      window.addEventListener(
+        "mousemove",
+        (e) => {
+          const cx = window.innerWidth / 2;
+          const cy = window.innerHeight / 2;
+          targetX = clamp((-(e.clientX - cx) / cx) * MAX, MAX);
+          targetY = clamp((-(e.clientY - cy) / cy) * MAX, MAX);
+        },
+        { passive: true }
+      );
+    }
+
+    // Móvil: inclinación (giroscopio). Se calibra con la primera lectura.
+    let baseGamma: number | null = null;
+    let baseBeta: number | null = null;
+    const onOrient = (e: DeviceOrientationEvent) => {
+      if (e.gamma == null || e.beta == null) return;
+      if (baseGamma == null) {
+        baseGamma = e.gamma;
+        baseBeta = e.beta;
+      }
+      targetX = clamp(-(e.gamma - (baseGamma ?? 0)) * 0.9, MAX);
+      targetY = clamp(-(e.beta - (baseBeta ?? 0)) * 0.9, MAX);
+    };
+
+    const enableOrient = () => window.addEventListener("deviceorientation", onOrient, { passive: true });
+    const DOE = window.DeviceOrientationEvent as any;
+    if (DOE && typeof DOE.requestPermission === "function") {
+      // iOS 13+: requiere permiso desde un gesto del usuario (primer toque).
+      const req = () => {
+        DOE.requestPermission()
+          .then((state: string) => {
+            if (state === "granted") enableOrient();
+          })
+          .catch(() => {});
+      };
+      window.addEventListener("touchend", req, { passive: true, once: true });
+    } else if (DOE) {
+      enableOrient();
+    }
+
+    const loop = () => {
+      curX += (targetX - curX) * 0.08;
+      curY += (targetY - curY) * 0.08;
+      hero.style.setProperty("--tx", `${curX.toFixed(2)}px`);
+      hero.style.setProperty("--ty", `${curY.toFixed(2)}px`);
+      requestAnimationFrame(loop);
+    };
+    loop();
+  }
+</script>
+
+<style>
+  #inicio {
+    --tx: 0px;
+    --ty: 0px;
+  }
+  #inicio [data-tilt] {
+    transform: translate3d(
+        calc(var(--tx) * var(--depth, 1)),
+        calc(var(--ty) * var(--depth, 1)),
+        0
+      )
+      translateY(var(--sy, 0px));
+    will-change: transform;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #inicio [data-tilt] {
+      transform: translateY(var(--sy, 0px));
+    }
+  }
+</style>
 
 <script>
   // Ondas de agua al mover el cursor o el dedo sobre el hero, como si se
