@@ -47,7 +47,11 @@ const jsonLd = {
       // anterior. Los clics normales del menú durante la sesión no se ven
       // afectados: esto solo actúa en la carga inicial.
       if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-      const resetScrollToTop = () => window.scrollTo(0, 0);
+      // behavior: "instant" es clave: con scroll-behavior:smooth en el CSS,
+      // un scrollTo(0,0) normal se anima, y ese desplazamiento animado
+      // puede chocar con scroll-snap y acabar asentando en la sección
+      // siguiente en vez de en portada.
+      const resetScrollToTop = () => window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       resetScrollToTop();
       document.addEventListener("DOMContentLoaded", resetScrollToTop);
       window.addEventListener("load", resetScrollToTop);
