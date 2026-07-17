@@ -103,7 +103,7 @@ const jsonLd = {
     </div>
 
     <script>
-      const revealables = document.querySelectorAll<HTMLElement>("[data-reveal]");
+      const revealables = document.querySelectorAll<HTMLElement>("[data-reveal], [data-reveal-title]");
       const observer = new IntersectionObserver(
         (entries) => {
           for (const entry of entries) {
@@ -207,6 +207,22 @@ const jsonLd = {
   .js [data-reveal].is-visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  /*
+   * El clip-path va en el span interno, no en [data-reveal-title]: un
+   * elemento recortado al 0% de ancho se reporta con intersectionRatio 0,
+   * así que el propio observer nunca lo vería "visible" si se recortase
+   * a sí mismo (bloqueo circular). Observamos el h2 sin recortar y solo
+   * recortamos visualmente su contenido interno.
+   */
+  .js [data-reveal-title] .reveal-title-mask {
+    display: inline-block;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 1s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .js [data-reveal-title].is-visible .reveal-title-mask {
+    clip-path: inset(0 0 0 0);
   }
 
   #floating-gondola {

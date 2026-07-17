@@ -26,7 +26,13 @@ const highlights = [
   <div class="mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-24">
     <div data-reveal>
       <p class="mb-5 text-xs uppercase tracking-[0.4em] text-chocolate-600">Nuestra historia</p>
-      <h2 class="text-5xl text-brand-800 sm:text-6xl">Tradición familiar,<br />de Andújar para Andújar</h2>
+      <h2 class="text-5xl text-brand-800 sm:text-6xl" data-reveal-title><span class="reveal-title-mask">Tradición familiar,<br />de Andújar para Andújar</span></h2>
+
+      <div class="mt-8 flex items-baseline gap-3" data-counter="35">
+        <span class="counter-value font-serif text-6xl text-garnet-700 sm:text-7xl">0</span>
+        <span class="text-xs uppercase tracking-[0.3em] text-chocolate-600">años de experiencia</span>
+      </div>
+
       <p class="mt-8 max-w-lg text-lg font-light leading-relaxed text-brand-950/80">
         Somos una empresa familiar con más de 35 años de experiencia en
         hostelería, en pleno corazón de Andújar. Tres décadas escuchando a
@@ -65,3 +71,45 @@ const highlights = [
     </div>
   </div>
 </section>
+
+<script>
+  // Cuenta de 0 al valor real cuando el bloque de cifra entra en pantalla.
+  const counters = document.querySelectorAll<HTMLElement>("[data-counter]");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const animateCounter = (el: HTMLElement) => {
+    const target = parseInt(el.dataset.counter ?? "0", 10);
+    const valueEl = el.querySelector<HTMLElement>(".counter-value");
+    if (!valueEl) return;
+
+    if (reduceMotion) {
+      valueEl.textContent = String(target);
+      return;
+    }
+
+    const duration = 1400;
+    const start = performance.now();
+    const step = (now: number) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      valueEl.textContent = String(Math.round(eased * target));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+
+  if (counters.length) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target as HTMLElement);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+    counters.forEach((el) => observer.observe(el));
+  }
+</script>

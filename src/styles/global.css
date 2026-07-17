@@ -77,6 +77,17 @@
     scroll-behavior: smooth;
   }
 
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-snap-type: y mandatory;
+    }
+
+    main > section {
+      scroll-snap-align: start;
+      scroll-margin-top: 6rem;
+    }
+  }
+
   body {
     @apply bg-beige-50 text-brand-950 font-sans font-light antialiased;
   }
