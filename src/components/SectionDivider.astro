@@ -6,10 +6,22 @@ interface Props {
 }
 
 const { from, to, height = "10rem" } = Astro.props;
+
+/*
+ * Un degradado lineal puro "corta" su pendiente de golpe al tocar el color
+ * sólido de cada sección, y el ojo percibe una línea (banding). Suavizamos
+ * con una curva smoothstep para que el degradado aplane en ambos extremos y
+ * funda sin corte, e interpolamos en oklab para una mezcla perceptual limpia.
+ */
+const smoothstep = (t: number) => t * t * (3 - 2 * t);
+const steps = 16;
+const stops = Array.from({ length: steps + 1 }, (_, i) => {
+  const t = i / steps;
+  const weight = Math.round(smoothstep(t) * 10000) / 100; // % del color destino
+  const pos = Math.round(t * 10000) / 100;
+  return `color-mix(in oklab, var(--color-${to}) ${weight}%, var(--color-${from})) ${pos}%`;
+});
+const gradient = `linear-gradient(to bottom, ${stops.join(", ")})`;
 ---
 
-<div
-  aria-hidden="true"
-  style={`height:${height}; background:linear-gradient(to bottom, var(--color-${from}), var(--color-${to}));`}
->
-</div>
+<div aria-hidden="true" style={`height:${height}; background:${gradient};`}></div>
