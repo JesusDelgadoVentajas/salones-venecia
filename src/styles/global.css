@@ -79,7 +79,11 @@
 
   @media (prefers-reduced-motion: no-preference) {
     html {
-      scroll-snap-type: y mandatory;
+      /* proximity (no mandatory): mantiene el encaje por secciones pero sin
+         forzar un salto tras cada cambio de tamaño del viewport — en Safari
+         iOS, mandatory reencaja al aparecer/ocultarse la barra de direcciones
+         y era una de las causas del salto involuntario a la sección siguiente. */
+      scroll-snap-type: y proximity;
     }
 
     main > section {

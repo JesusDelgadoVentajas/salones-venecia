@@ -47,10 +47,19 @@ const jsonLd = {
       // anterior. Los clics normales del menú durante la sesión no se ven
       // afectados: esto solo actúa en la carga inicial.
       if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-      // behavior: "instant" es clave: con scroll-behavior:smooth en el CSS,
-      // un scrollTo(0,0) normal se anima, y ese desplazamiento animado
-      // puede chocar con scroll-snap y acabar asentando en la sección
-      // siguiente en vez de en portada.
+
+      // CAUSA RAÍZ del salto a "Nuestra historia" al recargar en Safari iOS:
+      // si la URL trae un ancla (#historia, de haber pulsado el menú antes),
+      // Safari salta a esa sección al recargar. Lo eliminamos de la URL AQUÍ,
+      // inline en el <head> y antes de que exista el <body>, para que no haya
+      // ningún destino al que saltar. Solo actúa en la carga completa; los
+      // clics del menú durante la sesión siguen funcionando con normalidad.
+      if (location.hash) {
+        history.replaceState(null, "", location.pathname + location.search);
+      }
+
+      // behavior: "instant" evita que scroll-behavior:smooth anime el reset y
+      // choque con el scroll-snap.
       const resetScrollToTop = () => window.scrollTo({ top: 0, left: 0, behavior: "instant" });
       resetScrollToTop();
       document.addEventListener("DOMContentLoaded", resetScrollToTop);
@@ -58,8 +67,8 @@ const jsonLd = {
       // pageshow cubre las restauraciones desde la bfcache (volver atrás,
       // y en algunos móviles también recargar), que no disparan "load".
       window.addEventListener("pageshow", resetScrollToTop);
-      // Último resguardo: algunos navegadores móviles restauran el scroll
-      // (o el scroll-snap lo reajusta) justo después de "load".
+      // Resguardos por si el scroll-snap o la barra de direcciones de Safari
+      // (que redimensiona el viewport svh) reajustan el scroll tras la carga.
       setTimeout(resetScrollToTop, 100);
       setTimeout(resetScrollToTop, 500);
     </script>
